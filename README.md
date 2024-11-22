@@ -1,9 +1,3 @@
-# **Trading Journal**
-
-An advanced Python-based trading journal application focused on the **Wyckoff Method**. This tool allows traders to analyze performance, detect Wyckoff phases, and visualize their trading data with ease. Built to provide clarity and insights for both beginner and advanced traders.
-
----
-
 # Trading Journal Application
 
 An advanced Python-based trading journal designed to analyze and visualize trading data using concepts inspired by the Wyckoff Method and Volume Spread Analysis (VSA). The app helps traders track their trades, detect market phases, and gain insights into their performance.

@@ -1,46 +1,32 @@
 class VolumeSpreadAnalyzer:
-    """
-    Analyze Volume Spread Analysis (VSA) signals in trade data.
-    """
     def calculate_spread(self, data):
         """
-        Calculate price spread (High - Low) for each trade.
-
-        Args:
-            data (pd.DataFrame): The input trade data.
-
-        Returns:
-            pd.DataFrame: Updated DataFrame with a new "Spread" column.
+        Calculate the spread as the difference between high and low prices.
         """
         print("Calculating price spread...")
         data["Spread"] = data["High"] - data["Low"]
         return data
 
     def detect_vsa_signals(self, data):
-        """
-        Detect VSA signals based on volume and spread.
-        """
         print("Detecting VSA signals...")
         data["Volume Signal"] = "Neutral"  # Default signal
 
-        # High Volume, Wide Spread
-        data.loc[
-            (data["Volume"] > data["Volume"].mean()) &
-            (data["Spread"] > data["Spread"].mean()),
-            "Volume Signal"
-            ] = "High Volume Wide Spread"
+        high_volume = data["Volume"] > data["Volume"].mean()
+        wide_spread = data["Spread"] > data["Spread"].mean()
+        low_volume = data["Volume"] < data["Volume"].mean()
+        narrow_spread = data["Spread"] < data["Spread"].mean()
 
-        # Low Volume, Narrow Spread
-        data.loc[
-            (data["Volume"] < data["Volume"].mean()) &
-            (data["Spread"] < data["Spread"].mean()),
-            "Volume Signal"
-        ] = "Low Volume Narrow Spread"
+        # High Volume Wide Spread
+        data.loc[high_volume & wide_spread, "Volume Signal"] = "High Volume Wide Spread"
 
-        # Ensure truly "Neutral" cases remain
+        # Low Volume Narrow Spread
+        data.loc[low_volume & narrow_spread, "Volume Signal"] = "Low Volume Narrow Spread"
+
+        # Explicitly set Neutral for anything that doesn't meet specific conditions
         data.loc[
-            (data["Volume Signal"] != "High Volume Wide Spread") &
-            (data["Volume Signal"] != "Low Volume Narrow Spread"),
+            ~(high_volume & wide_spread) & ~(low_volume & narrow_spread),
             "Volume Signal"
         ] = "Neutral"
+
         return data
+

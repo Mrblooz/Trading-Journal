@@ -1,5 +1,6 @@
 from tools.data_manager import DataManager  # Data loading/saving logic
 from tools.analyzer import Analyzer        # Wyckoff phase detection logic
+from tools.vsa import VolumeSpreadAnalyzer
 from tools.visualization import Visualizer  # Data visualization logic
 
 class TradingJournalApp:
@@ -10,6 +11,7 @@ class TradingJournalApp:
     def __init__(self):
         self.data_manager = DataManager()  # Handles loading/saving trade data
         self.analyzer = Analyzer()  # Detects Wyckoff phases
+        self.vsa_analyzer = VolumeSpreadAnalyzer()
         self.visualizer = Visualizer()  # Plots trade data
 
     def run(self):
@@ -24,6 +26,11 @@ class TradingJournalApp:
 
         # Analyze phases in the trade data
         analyzed_data = self.analyzer.detect_phases(data)
+
+        # Apply Volume Spread Analysis (VSA)
+        data = self.vsa_analyzer.calculate_spread(data)
+        data = self.vsa_analyzer.detect_vsa_signals(data)
+
 
         # Visualize the results
         self.visualizer.plot_data(analyzed_data)

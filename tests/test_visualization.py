@@ -1,5 +1,8 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 from tools.visualization import Visualizer
+
+
 
 def test_plot_data(mocker):
     visualizer = Visualizer()
@@ -11,7 +14,8 @@ def test_plot_data(mocker):
     })
 
     # Mock the plt.show() method to prevent rendering during tests
-    mocker.patch("matplotlib.pyplot.show")
+    # mocker.patch("matplotlib.pyplot.show")
+    plt.show = lambda: None
 
     # Run the plot method
     visualizer.plot_data(test_data)

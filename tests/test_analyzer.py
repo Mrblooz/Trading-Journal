@@ -1,4 +1,5 @@
 import pandas as pd
+from tools.vsa import VolumeSpreadAnalyzer
 from tools.analyzer import Analyzer
 
 def test_detect_phases():

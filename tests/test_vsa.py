@@ -1,5 +1,6 @@
 import pandas as pd
 from tools.vsa import VolumeSpreadAnalyzer
+import pytest
 
 def test_calculate_spread():
     analyzer = VolumeSpreadAnalyzer()
@@ -10,7 +11,8 @@ def test_calculate_spread():
 
     result = analyzer.calculate_spread(test_data)
     assert "Spread" in result.columns, "Missing 'Spread' column in output."
-    assert result["Spread"].iloc[0] == 0.05, "Incorrect spread calculation for first row."
+    assert result["Spread"].iloc[0] == pytest.approx(0.05), "Incorrect spread calculation for first row."
+
 
 def test_detect_vsa_signals():
     analyzer = VolumeSpreadAnalyzer()

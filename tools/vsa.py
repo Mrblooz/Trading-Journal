@@ -19,12 +19,6 @@ class VolumeSpreadAnalyzer:
     def detect_vsa_signals(self, data):
         """
         Detect VSA signals based on volume and spread.
-
-        Args:
-            data (pd.DataFrame): The input trade data.
-
-        Returns:
-            pd.DataFrame: Updated DataFrame with a new "Volume Signal" column.
         """
         print("Detecting VSA signals...")
         data["Volume Signal"] = "Neutral"  # Default signal
@@ -34,7 +28,7 @@ class VolumeSpreadAnalyzer:
             (data["Volume"] > data["Volume"].mean()) &
             (data["Spread"] > data["Spread"].mean()),
             "Volume Signal"
-        ] = "High Volume Wide Spread"
+            ] = "High Volume Wide Spread"
 
         # Low Volume, Narrow Spread
         data.loc[
@@ -43,6 +37,10 @@ class VolumeSpreadAnalyzer:
             "Volume Signal"
         ] = "Low Volume Narrow Spread"
 
+        # Ensure truly "Neutral" cases remain
+        data.loc[
+            (data["Volume Signal"] != "High Volume Wide Spread") &
+            (data["Volume Signal"] != "Low Volume Narrow Spread"),
+            "Volume Signal"
+        ] = "Neutral"
         return data
-
-

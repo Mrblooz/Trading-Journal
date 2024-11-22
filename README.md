@@ -77,9 +77,6 @@ trading-journal/
 
 ---
 
-
----
-
 ## 📋 What’s Next?
 
 1. **Enhance Visualization**:

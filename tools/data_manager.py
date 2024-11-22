@@ -41,7 +41,7 @@ class DataManager:
             print(f"An error occurred while saving data: {e}")
             raise
 
-    def fetch_historical_data(self, pair="EURUSD=X", start="2021-01-01", end="2023-01-01"):
+    def fetch_historical_data(self, pair="EUR/USD=X", start="2021-01-01", end="2023-01-01"):
         """
         Fetch historical data from Yahoo Finance.
         

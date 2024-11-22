@@ -1,0 +1,7 @@
+trading-journal/
+├── app.py              # Hoofdbestand
+├── data/               # Voor lokale data zoals CSV-bestanden
+├── tools/              # Hulpmiddelen zoals analyses
+├── tests/              # Testen
+├── requirements.txt    # Python dependencies
+└── README.md           # Project documentatie

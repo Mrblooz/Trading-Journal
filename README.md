@@ -1,237 +1,193 @@
-Trading Journal Project
 
-An advanced Python-based trading journal designed to analyze and visualize trading data using concepts inspired by the Wyckoff Method and Volume Spread Analysis (VSA). The app helps traders track their trades, detect market phases, and gain insights into their performance.
+# 📘 **Trading Journal**
 
----
-
-🚀 Features
-
-    📊 Data Management
-        Load trade data from CSV files.
-        Save updated trade data to CSV files with error handling and logging.
-        Fetch historical data via Yahoo Finance API using yfinance.
-
-    🧮 Wyckoff Phase Detection
-        Detect trading phases such as "Accumulation," "Distribution," "Markup," and "Markdown" using rolling averages.
-
-    📈 Volume Spread Analysis (VSA)
-        Calculate price spreads for each trade.
-        Detect potential VSA signals such as "High Volume Wide Spread" or "Low Volume Narrow Spread."
-
-    📊 Visualization
-        Plot Entry and Exit Prices with:
-            Wyckoff phases annotated.
-            VSA signals displayed directly on the chart.
-            Dynamic and interactive visualizations.
-
-    🛠 Modular Design
-        Simplified codebase with clear separation of concerns:
-            app.py: Main application runner.
-            data_manager.py: Data loading, saving, and fetching logic.
-            phases.py: Wyckoff phase detection logic.
-            vsa.py: Volume Spread Analysis logic.
-            visualizations.py: Plotting and visualization logic.
+Een geavanceerd Python-gebaseerd trading journal ontworpen om handelsgegevens te analyseren en te visualiseren met concepten geïnspireerd door de **Wyckoff-methode** en **Volume Spread Analysis (VSA)**. Deze applicatie helpt traders hun trades te volgen, marktfases te detecteren en waardevolle inzichten te verkrijgen in hun prestaties.
 
 ---
 
-🧩 Folder Structure
+## 🚀 **Features**
 
-Here’s how the project is organized:
+✅ **Data Management**  
+- Laad handelsgegevens uit CSV-bestanden.  
+- Sla bijgewerkte handelsgegevens op met foutafhandeling en logging.  
+- Haal historische gegevens op via de Yahoo Finance API (*yfinance*).  
 
-```plain text
+✅ **Wyckoff Phase Detection**  
+- Herken handelsfases zoals:  
+  - *Accumulation*  
+  - *Distribution*  
+  - *Markup*  
+  - *Markdown*  
+- Gebruik van voortschrijdende gemiddelden en prijsactie.
+
+✅ **Volume Spread Analysis (VSA)**  
+- Bereken prijsspreads voor elke trade.  
+- Detecteer belangrijke VSA-signalen zoals:  
+  - "High Volume Wide Spread"  
+  - "Low Volume Narrow Spread"  
+
+✅ **Visualisatie**  
+- Plot instap- en uitstapprijzen met:  
+  - Annotaties voor Wyckoff-fases.  
+  - VSA-signalen direct zichtbaar op de grafiek.  
+  - Dynamische en interactieve visualisaties.  
+
+✅ **Modulair Ontwerp**  
+- Gestructureerde en overzichtelijke codebase:  
+  - **`app.py`**: Hoofdapplicatie.  
+  - **`data_manager.py`**: Data-inladen, opslaan en ophalen.  
+  - **`phases.py`**: Wyckoff-fase detectie.  
+  - **`vsa.py`**: Volume Spread Analysis-logica.  
+  - **`visualizations.py`**: Plotten en visualiseren.
+
+---
+
+## 🗂 **Folder Structure**
+
+```plaintext
 trading-journal/
-├── README.md                # Project documentation
-├── app.py                   # Main script for running the app
-├── data/                    # Local storage for trade and market data
-│   └── example_trades.csv   # Example trade data file
-├── tools/                   # Core logic and utilities
-│   ├── __init__.py          # Makes 'tools' a Python module
-│   ├── data_manager.py      # Data loading, saving, and fetching logic
-│   ├── phases.py            # Wyckoff phase detection logic
-│   ├── vsa.py               # Volume Spread Analysis (VSA) logic
-│   └── visualizations.py    # Plotting and visualization logic
-├── tests/                   # Unit tests for modules
+├── README.md                # Projectdocumentatie
+├── app.py                   # Hoofdapplicatie
+├── data/                    # Lokale opslag van data
+│   └── example_trades.csv   # Voorbeeld-handelsbestand
+├── tools/                   # Kernlogica en utilities
+│   ├── __init__.py          # Initieert de module
+│   ├── data_manager.py      # Data management
+│   ├── phases.py            # Wyckoff-fase detectie
+│   ├── vsa.py               # VSA-logica
+│   └── visualizations.py    # Visualisaties
+├── tests/                   # Unit tests
 │   ├── test_data_manager.py
 │   ├── test_phases.py
 │   ├── test_vsa.py
 │   └── test_visualizations.py
-├── notebooks/               # Optional Jupyter notebooks for research
-└── docs/                    # Documentation and guides
+├── notebooks/               # Optionele Jupyter-notebooks
+└── docs/                    # Documentatie en gidsen
 ```
 
 ---
 
-🛠 Installation
+## 🛠 **Installatie**
 
-1. Clone the repository:
-      ```bash   
-         git clone https://github.com/YourUsername/trading-journal.git
-         cd trading-journal
-      ```
-2. Install dependencies:
-      ```bash
-         pip install -r requirements.txt
-      ```
-3. Run Tests to ensure everything is working.
-      ```bash
-         pytest ./tests/
-      ```
+1. **Clone de repository**  
+   ```bash
+   git clone https://github.com/YourUsername/trading-journal.git
+   cd trading-journal
+   ```
 
----
+2. **Installeer vereisten**  
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-⚙️ How to Use
-
-   1. Set Up Environment:
-        Install dependencies as shown above.
-
-   2. Run the Application:
-         Execute the app:
-         ```bash
-         python app.py
-         ```
-   3. Provide Your Data:
-         Place your trade data CSV in the /data folder.
-         Ensure it follows the correct structure (see Sample CSV Structure below).
-
-   4. View Results:
-         Check the output folder for processed data and visualizations.
+3. **Run tests**  
+   ```bash
+   pytest ./tests/
+   ```
 
 ---
 
-📊 Sample Workflow
+## ⚙️ **Hoe te gebruiken**
 
-   1. Load Data:
-         Reads trade data from data/example_trades.csv or your provided file.
+1. **Omgeving instellen**  
+   Installeer de vereisten zoals hierboven beschreven.
 
-   2. Analyze Data:
-         Detects Wyckoff phases (e.g., "Accumulation", "Markup").
-         Identifies VSA signals (e.g., "High Volume Wide Spread").
+2. **Applicatie uitvoeren**  
+   Start de app met:  
+   ```bash
+   python app.py
+   ```
 
-   3. Visualize Data:
-         Generates a chart showing:
-            Entry and Exit Prices.
-            Phases annotated near Entry Prices.
-            VSA signals annotated directly on the chart.
+3. **Data aanleveren**  
+   Plaats je handelsdata-CSV in de `/data` map.  
+   Zorg ervoor dat deze het juiste formaat heeft (zie voorbeeld hieronder).
 
----
-
-🗂 Sample CSV Structure
-
-```csv
-Date,Asset,High,Low,Entry Price,Exit Price,Volume,Phase
-2023-01-01,EUR/USD,1.25,1.20,1.2000,1.2500,100000,Undefined
-2023-01-02,EUR/USD,1.26,1.25,1.2500,1.2600,120000,Undefined
-2023-01-03,EUR/USD,1.24,1.23,1.2400,1.2300,130000,Undefined
-2023-01-04,EUR/USD,1.21,1.20,1.1200,1.2000,140000,Undefined
-2023-01-05,EUR/USD,1.19,1.18,1.1900,1.1000,150000,Undefined
-```
+4. **Resultaten bekijken**  
+   Verwerkte data en visualisaties worden opgeslagen in de outputmap.
 
 ---
 
-📈 Project Progress
+## 📊 **Sample CSV Structure**
 
-Completed Tasks
-
-Modularized code into distinct files (data_manager.py, phases.py, vsa.py, visualizations.py, and app.py).
-Implemented logging for robust debugging and error tracking.
-Fully implemented and tested Wyckoff phase detection.
-Created dynamic tests using pytest for all modules.
-Established a clean and extensible project structure.
-
-    Built foundational visualizations for trading data.
-
-Upcoming Tasks
-
-Enhance Visualization
-
-    Add subplots for volume and profit/loss metrics.
-    Highlight VSA signals visually on the chart.
-
-Profit and Loss (PnL)
-
-    Calculate and visualize PnL for each trade.
-
-Expand VSA Logic
-
-    Add detection for "Climactic Action" and "Stopping Volume."
-
-Build Tests
-
-    Write end-to-end tests for app.py.
-
-Integrate Real-Time Data
-
-    Incorporate APIs for live market data.
-    Provide AI-driven trade insights.
+| Date       | Asset   | High  | Low   | Entry Price | Exit Price | Volume  | Phase     |
+|------------|---------|-------|-------|-------------|------------|---------|-----------|
+| 2023-01-01 | EUR/USD | 1.25  | 1.20  | 1.2000      | 1.2500     | 100000  | Undefined |
+| 2023-01-02 | EUR/USD | 1.26  | 1.25  | 1.2500      | 1.2600     | 120000  | Undefined |
+| 2023-01-03 | EUR/USD | 1.24  | 1.23  | 1.2400      | 1.2300     | 130000  | Undefined |
 
 ---
 
-🛣️ Roadmap
-Phase 1: Foundation
+## 📈 **Voorbeeld Workflow**
 
-    Load and manage CSV data.
-    Perform Wyckoff analysis.
-    Visualize results.
+1. **Data laden**  
+   Laadt handelsdata vanuit `/data/example_trades.csv`.
 
-Phase 2: Advanced Analytics
+2. **Data analyseren**  
+   - Detecteert Wyckoff-fases (bijvoorbeeld *Accumulation*, *Markup*).  
+   - Herkent VSA-signalen (bijvoorbeeld *High Volume Wide Spread*).
 
-    Add Volume Spread Analysis (VSA).
-    Improve visualizations with interactivity.
-
-Phase 3: Real-Time Data
-
-    Integrate APIs for live market data.
-    Provide AI-driven trade insights.
+3. **Data visualiseren**  
+   Genereert een grafiek met:  
+   - Instap- en uitstapprijzen.  
+   - Annotaties van fases.  
+   - VSA-signalen.
 
 ---
 
-🛠 Technologies Used
+## 🛣️ **Roadmap**
 
-    Python: Core programming language.
-    Pandas: Data manipulation and analysis.
-    Matplotlib: Data visualization.
-    Yahoo Finance API via yfinance: Fetching historical market data.
-    Pytest: Unit testing framework.
+### **Fase 1: Fundament**  
+✅ CSV-data laden en beheren  
+✅ Wyckoff-analyse uitvoeren  
+✅ Resultaten visualiseren  
 
----
+### **Fase 2: Geavanceerde Analyse**  
+⬜ Volume Spread Analysis (VSA) uitbreiden  
+⬜ Interactiviteit in visualisaties verbeteren  
 
-📸 Screenshots
-
-Coming soon! Stay tuned for visual examples of the application's capabilities.
-
----
-
-🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-   1. Fork the repository.
-   2. Create a new branch:
-      ```bash
-         git checkout -b feature-name
-      ```
-   3. Commit your changes:
-      ```bash
-         git commit -m "Add new feature"
-      ```
-   4. Push to the branch:
-      ```bash
-         git push origin feature-name
-      ```
-   5. Open a Pull Request.
+### **Fase 3: Real-Time Data**  
+⬜ API-integratie voor live marktdata  
+⬜ AI-gestuurde handel inzichten bieden  
 
 ---
 
-📝 License
+## 📸 **Screenshots**
 
-This project is licensed under the MIT License. Feel free to use and modify it as you see fit!
-
----
-
-📬 Contact
-
-For any questions or suggestions, please feel free to contact me at goliathnm@gmail.com.
+Binnenkort beschikbaar! Houd deze sectie in de gaten voor visuele voorbeelden van de mogelijkheden.
 
 ---
 
-Enjoy exploring and enhancing the Trading Journal! 🚀
+## 🤝 **Bijdragen**
+
+Wij verwelkomen bijdragen!  
+
+1. Fork de repository.  
+2. Maak een nieuwe branch:  
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit je wijzigingen:  
+   ```bash
+   git commit -m "Nieuwe functie toegevoegd"
+   ```
+4. Push naar de branch:  
+   ```bash
+   git push origin feature-name
+   ```
+5. Open een Pull Request.
+
+---
+
+## 📝 **Licentie**
+
+Dit project is gelicentieerd onder de MIT License. Gebruik en wijzig het zoals je wilt!
+
+---
+
+📬 **Contact**
+
+Heb je vragen of suggesties? Neem gerust contact op via **goliathnm@gmail.com**.
+
+---
+
+Veel succes met het verkennen en verbeteren van het Trading Journal! 🚀

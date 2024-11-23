@@ -1,44 +1,44 @@
 
 # 📘 **Trading Journal**
 
-Een geavanceerd Python-gebaseerd trading journal ontworpen om handelsgegevens te analyseren en te visualiseren met concepten geïnspireerd door de **Wyckoff-methode** en **Volume Spread Analysis (VSA)**. Deze applicatie helpt traders hun trades te volgen, marktfases te detecteren en waardevolle inzichten te verkrijgen in hun prestaties.
+An advanced Python-based trading journal designed to analyze and visualize trading data using concepts inspired by the **Wyckoff Method** and **Volume Spread Analysis (VSA)**. This application helps traders track their trades, detect market phases, and gain valuable insights into their performance.
 
 ---
 
 ## 🚀 **Features**
 
 ✅ **Data Management**  
-- Laad handelsgegevens uit CSV-bestanden.  
-- Sla bijgewerkte handelsgegevens op met foutafhandeling en logging.  
-- Haal historische gegevens op via de Yahoo Finance API (*yfinance*).  
+- Load trading data from CSV files.  
+- Save updated trading data with error handling and logging.  
+- Fetch historical data via the Yahoo Finance API (*yfinance*).  
 
 ✅ **Wyckoff Phase Detection**  
-- Herken handelsfases zoals:  
+- Identify market phases such as:  
   - *Accumulation*  
   - *Distribution*  
   - *Markup*  
   - *Markdown*  
-- Gebruik van voortschrijdende gemiddelden en prijsactie.
+- Utilize rolling averages and price action for detection.
 
 ✅ **Volume Spread Analysis (VSA)**  
-- Bereken prijsspreads voor elke trade.  
-- Detecteer belangrijke VSA-signalen zoals:  
+- Calculate price spreads for each trade.  
+- Detect critical VSA signals such as:  
   - "High Volume Wide Spread"  
   - "Low Volume Narrow Spread"  
 
-✅ **Visualisatie**  
-- Plot instap- en uitstapprijzen met:  
-  - Annotaties voor Wyckoff-fases.  
-  - VSA-signalen direct zichtbaar op de grafiek.  
-  - Dynamische en interactieve visualisaties.  
+✅ **Visualization**  
+- Plot entry and exit prices with:  
+  - Annotations for Wyckoff phases.  
+  - VSA signals directly displayed on the chart.  
+  - Dynamic and interactive visualizations.  
 
-✅ **Modulair Ontwerp**  
-- Gestructureerde en overzichtelijke codebase:  
-  - **`app.py`**: Hoofdapplicatie.  
-  - **`data_manager.py`**: Data-inladen, opslaan en ophalen.  
-  - **`phases.py`**: Wyckoff-fase detectie.  
-  - **`vsa.py`**: Volume Spread Analysis-logica.  
-  - **`visualizations.py`**: Plotten en visualiseren.
+✅ **Modular Design**  
+- Structured and clean codebase:  
+  - **`app.py`**: Main application.  
+  - **`data_manager.py`**: Data loading, saving, and fetching.  
+  - **`phases.py`**: Wyckoff phase detection.  
+  - **`vsa.py`**: Volume Spread Analysis logic.  
+  - **`visualizations.py`**: Plotting and visualizations.
 
 ---
 
@@ -46,36 +46,36 @@ Een geavanceerd Python-gebaseerd trading journal ontworpen om handelsgegevens te
 
 ```plaintext
 trading-journal/
-├── README.md                # Projectdocumentatie
-├── app.py                   # Hoofdapplicatie
-├── data/                    # Lokale opslag van data
-│   └── example_trades.csv   # Voorbeeld-handelsbestand
-├── tools/                   # Kernlogica en utilities
-│   ├── __init__.py          # Initieert de module
+├── README.md                # Project documentation
+├── app.py                   # Main application
+├── data/                    # Local storage for data
+│   └── example_trades.csv   # Example trading file
+├── tools/                   # Core logic and utilities
+│   ├── __init__.py          # Module initializer
 │   ├── data_manager.py      # Data management
-│   ├── phases.py            # Wyckoff-fase detectie
-│   ├── vsa.py               # VSA-logica
-│   └── visualizations.py    # Visualisaties
+│   ├── phases.py            # Wyckoff phase detection
+│   ├── vsa.py               # VSA logic
+│   └── visualizations.py    # Visualizations
 ├── tests/                   # Unit tests
 │   ├── test_data_manager.py
 │   ├── test_phases.py
 │   ├── test_vsa.py
 │   └── test_visualizations.py
-├── notebooks/               # Optionele Jupyter-notebooks
-└── docs/                    # Documentatie en gidsen
+├── notebooks/               # Optional Jupyter notebooks
+└── docs/                    # Documentation and guides
 ```
 
 ---
 
-## 🛠 **Installatie**
+## 🛠 **Installation**
 
-1. **Clone de repository**  
+1. **Clone the repository**  
    ```bash
    git clone https://github.com/YourUsername/trading-journal.git
    cd trading-journal
    ```
 
-2. **Installeer vereisten**  
+2. **Install dependencies**  
    ```bash
    pip install -r requirements.txt
    ```
@@ -87,23 +87,23 @@ trading-journal/
 
 ---
 
-## ⚙️ **Hoe te gebruiken**
+## ⚙️ **How to Use**
 
-1. **Omgeving instellen**  
-   Installeer de vereisten zoals hierboven beschreven.
+1. **Set up the environment**  
+   Install dependencies as described above.
 
-2. **Applicatie uitvoeren**  
-   Start de app met:  
+2. **Run the application**  
+   Start the app:  
    ```bash
    python app.py
    ```
 
-3. **Data aanleveren**  
-   Plaats je handelsdata-CSV in de `/data` map.  
-   Zorg ervoor dat deze het juiste formaat heeft (zie voorbeeld hieronder).
+3. **Provide your data**  
+   Place your trading data CSV in the `/data` folder.  
+   Ensure it follows the correct structure (see sample below).
 
-4. **Resultaten bekijken**  
-   Verwerkte data en visualisaties worden opgeslagen in de outputmap.
+4. **View results**  
+   Processed data and visualizations will be saved in the output folder.
 
 ---
 
@@ -117,77 +117,77 @@ trading-journal/
 
 ---
 
-## 📈 **Voorbeeld Workflow**
+## 📈 **Sample Workflow**
 
-1. **Data laden**  
-   Laadt handelsdata vanuit `/data/example_trades.csv`.
+1. **Load data**  
+   Reads trading data from `/data/example_trades.csv`.
 
-2. **Data analyseren**  
-   - Detecteert Wyckoff-fases (bijvoorbeeld *Accumulation*, *Markup*).  
-   - Herkent VSA-signalen (bijvoorbeeld *High Volume Wide Spread*).
+2. **Analyze data**  
+   - Detects Wyckoff phases (e.g., *Accumulation*, *Markup*).  
+   - Identifies VSA signals (e.g., *High Volume Wide Spread*).
 
-3. **Data visualiseren**  
-   Genereert een grafiek met:  
-   - Instap- en uitstapprijzen.  
-   - Annotaties van fases.  
-   - VSA-signalen.
+3. **Visualize data**  
+   Generates a chart showing:  
+   - Entry and exit prices.  
+   - Annotated phases.  
+   - VSA signals.
 
 ---
 
 ## 🛣️ **Roadmap**
 
-### **Fase 1: Fundament**  
-✅ CSV-data laden en beheren  
-✅ Wyckoff-analyse uitvoeren  
-✅ Resultaten visualiseren  
+### **Phase 1: Foundation**  
+✅ Load and manage CSV data  
+✅ Perform Wyckoff analysis  
+✅ Visualize results  
 
-### **Fase 2: Geavanceerde Analyse**  
-⬜ Volume Spread Analysis (VSA) uitbreiden  
-⬜ Interactiviteit in visualisaties verbeteren  
+### **Phase 2: Advanced Analytics**  
+⬜ Expand Volume Spread Analysis (VSA)  
+⬜ Improve interactivity in visualizations  
 
-### **Fase 3: Real-Time Data**  
-⬜ API-integratie voor live marktdata  
-⬜ AI-gestuurde handel inzichten bieden  
+### **Phase 3: Real-Time Data**  
+⬜ Integrate APIs for live market data  
+⬜ Provide AI-driven trading insights  
 
 ---
 
 ## 📸 **Screenshots**
 
-Binnenkort beschikbaar! Houd deze sectie in de gaten voor visuele voorbeelden van de mogelijkheden.
+Coming soon! Stay tuned for visual examples of the application's capabilities.
 
 ---
 
-## 🤝 **Bijdragen**
+## 🤝 **Contributing**
 
-Wij verwelkomen bijdragen!  
+We welcome contributions!  
 
-1. Fork de repository.  
-2. Maak een nieuwe branch:  
+1. Fork the repository.  
+2. Create a new branch:  
    ```bash
    git checkout -b feature-name
    ```
-3. Commit je wijzigingen:  
+3. Commit your changes:  
    ```bash
-   git commit -m "Nieuwe functie toegevoegd"
+   git commit -m "Add new feature"
    ```
-4. Push naar de branch:  
+4. Push to the branch:  
    ```bash
    git push origin feature-name
    ```
-5. Open een Pull Request.
+5. Open a Pull Request.
 
 ---
 
-## 📝 **Licentie**
+## 📝 **License**
 
-Dit project is gelicentieerd onder de MIT License. Gebruik en wijzig het zoals je wilt!
+This project is licensed under the MIT License. Feel free to use and modify it as you see fit!
 
 ---
 
 📬 **Contact**
 
-Heb je vragen of suggesties? Neem gerust contact op via **goliathnm@gmail.com**.
+For any questions or suggestions, feel free to reach out at **goliathnm@gmail.com**.
 
 ---
 
-Veel succes met het verkennen en verbeteren van het Trading Journal! 🚀
+Enjoy exploring and enhancing the Trading Journal! 🚀

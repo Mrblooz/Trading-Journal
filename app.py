@@ -1,4 +1,4 @@
-from tools.data_manager import DataManager  # Data loading/saving logic
+from tools.data_manager import DataMananger  # Data loading/saving logic
 from tools.analyzer import Analyzer        # Wyckoff phase detection logic
 from tools.vsa import VolumeSpreadAnalyzer
 from tools.visualization import Visualizer  # Data visualization logic
@@ -9,7 +9,7 @@ class TradingJournalApp:
     Orchestrates data loading, analysis, and visualization.
     """
     def __init__(self):
-        self.data_manager = DataManager()  # Handles loading/saving trade data
+        self.data_manager = DataMananger()  # Handles loading/saving trade data
         self.analyzer = Analyzer()  # Detects Wyckoff phases
         self.vsa_analyzer = VolumeSpreadAnalyzer()
         self.visualizer = Visualizer()  # Plots trade data
@@ -40,3 +40,5 @@ if __name__ == "__main__":
     # Initialize and run the app
     app = TradingJournalApp()
     app.run()
+
+

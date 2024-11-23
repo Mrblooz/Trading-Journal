@@ -3,7 +3,7 @@ import yfinance as yf
 import os
 import logging
 
-class DataMananger:
+class DataManager:
     def __init__(self): 
 
         """

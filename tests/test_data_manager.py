@@ -1,36 +1,33 @@
-import os
-import pandas as pd
 import pytest
+import pandas as pd
 from tools.data_manager import DataManager
 
-def test_load_data():
-    manager = DataManager()
-    filepath = "data/example_trades.csv"
+@pytest.fixture
 
-    # Ensure file exists before testing
-    assert os.path.exists(filepath), "Test file does not exist."
-
-    data = manager.load_data(filepath)
-    assert not data.empty, "Loaded data is empty."
-    assert "Date" in data.columns, "Missing 'Date' column in data."
-
-def test_save_data():
-    manager = DataManager()
-    test_data = pd.DataFrame({
+def sample_data():
+    return pd.DataFrame({
         "Date": pd.to_datetime(["2023-01-01", "2023-01-02"]),
-        "Asset": ["EUR/USD", "EUR/USD"],
-        "High": [1.25, 1.26],
-        "Low": [1.20, 1.25],
-        "Entry Price": [1.2000, 1.2500],
-        "Exit Price": [1.2500, 1.2600],
+        "Entry Price": [1.2, 1.25],
+        "Exit Price": [1.22, 1.28],
         "Volume": [100000, 120000]
     })
 
-    filepath = "data/test_save_data.csv"
-    manager.save_data(test_data, filepath)
+def test_load_data(mocker, sample_data):
+    mocker.patch("pandas.read_csv", return_value=sample_data)
+    manager = DataManager()
+    data = manager.load_data("dummy_path.csv")
+    pd.testing.assert_frame_equal(data, sample_data)
 
-    # Check if file is saved
-    assert os.path.exists(filepath), "Saved file does not exist."
+def test_save_data(mocker, sample_data):
+    mock_to_csv = mocker.patch.object(pd.DataFrame, "to_csv")
+    manager = DataManager()
+    manager.save_data(sample_data, "dummy_path.csv")
+    mock_to_csv.assert_called_once_with("dummy_path.csv", index=False)
 
-    # Cleanup after test
-    os.remove(filepath)
+def test_fetch_historical_data(mocker):
+    mock_download = mocker.patch("yfinance.download", return_value=pd.DataFrame({"Mock": [1, 2, 3]}))
+    manager = DataManager()
+    data = manager.fetch_historical_data()
+    assert not data.empty
+    mock_download.assert_called_once()
+    

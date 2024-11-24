@@ -1,20 +1,21 @@
-import pytest
 import pandas as pd
 from tools.analyzer import Analyzer
 
-@pytest.fixture
-def sample_data():
-    return pd.DataFrame({
-        "Entry Price":[1.2000, 1.2500, 1.2400],
-        "Phase":["Undefined", "Undefined", "Undefined"]
+def test_analyze_custom_logic():
+    """
+    Test the custom analysis logic in the Analyzer class.
+    """
+    analyzer = Analyzer()
+
+    # Example data
+    sample_data = pd.DataFrame({
+        "Entry Price": [1.20, 1.25],
+        "Volume": [100000, 150000]
     })
 
-def test_detect_phases(sample_data):
-    analyzer = Analyzer()
-    result = analyzer.detect_phases(sample_data)
+    # Apply custom analysis
+    result = analyzer.analyze_custom_logic(sample_data)
 
-    assert "Phase" in result.columns, "Missing 'Phase' column in output."
-    assert result["Phase"].iloc[0] == "Accumulation", "Incorrect phase detected for the first row"
-    assert result["Phase"].iloc[1] == "Markup", "Incorrect phase detected for second row."
-
-    
+    # Assertions
+    assert "Custom Analysis" in result.columns, "Custom Analysis column not added."
+    assert result["Custom Analysis"].iloc[0] == "Placeholder", "Incorrect custom analysis value."

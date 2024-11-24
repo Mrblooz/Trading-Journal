@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import logging
+import yfinance as yf
 
 # Initialize logger for DataManager
 logger = logging.getLogger("DataManager")
@@ -54,7 +55,47 @@ class DataManager:
         try:
             # Save the DataFrame to a CSV file
             data.to_csv(filepath, index=False)
-            logger.info("Data saved successfully.")
+            logger.info(f"Data saved successfully to {filepath}.")
         except Exception as e:
             logger.error("Unexpected error while saving data.", exc_info=True)
             raise
+
+    def fetch_historical_data(self, symbol, start_date, end_date):
+        """
+        Fetch historical market data using yfinance.
+        Args:
+            symbol (str): Ticker symbol (e.g., "AAPL").
+            start_date (str): Start date (e.g., "2023-01-01").
+            end_date (str): End date (e.g., "2023-12-31").
+        Returns:
+            pd.DataFrame: Historical market data.
+        """
+        logger.info(f"Fetching historical data for {symbol}...")
+        try:
+            # Fetch historical data using yfinance
+            data = yf.download(symbol, start=start_date, end=end_date)
+            
+            if data.empty:
+                logger.warning(f"No data fetched for {symbol} in the date range {start_date} to {end_date}.")
+                return pd.DataFrame()  # Return an empty DataFrame
+            
+            logger.info(f"Fetched {len(data)} rows of historical data.")
+            return data
+        except Exception as e:
+            logger.error("Failed to fetch historical data.", exc_info=True)
+            raise
+
+    def validate_data(self, data, required_columns):
+        """
+        Validates that the required columns exist in the DataFrame.
+        Args:
+            data (pd.DataFrame): The data to validate.
+            required_columns (list): List of required column names.
+        Raises:
+            ValueError: If any required column is missing.
+        """
+        missing_columns = [col for col in required_columns if col not in data.columns]
+        if missing_columns:
+            logger.error(f"Missing required columns: {missing_columns}")
+            raise ValueError(f"Missing required columns: {missing_columns}")
+        logger.info("All required columns are present.")

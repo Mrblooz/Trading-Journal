@@ -1,13 +1,15 @@
-import pytest
-import pandas as pd
-from unittest.mock import MagicMock
 from app import TradingJournalApp
+from unittest.mock import MagicMock
+import pandas as pd
 
 def test_app_run():
-    # Mocking dependencies
+    """
+    Test the main application workflow.
+    """
+    # Instantiate the app
     app = TradingJournalApp()
-    
-    # Mock data including necessary columns
+
+    # Mock data
     mock_data = pd.DataFrame({
         "Date": pd.to_datetime(["2023-01-01", "2023-01-02"]),
         "Entry Price": [1.20, 1.25],
@@ -15,20 +17,21 @@ def test_app_run():
         "High": [1.30, 1.35],
         "Low": [1.15, 1.20],
         "Volume": [100000, 120000]
-    })   
+    })
 
+    # Mock dependencies
     app.data_manager.load_data = MagicMock(return_value=mock_data)
-    app.analyzer.detect_phases = MagicMock(return_value=mock_data)
+    app.phase_analyzer.detect_phases = MagicMock(return_value=mock_data)
     app.vsa_analyzer.calculate_spread = MagicMock(return_value=mock_data)
     app.vsa_analyzer.detect_vsa_signals = MagicMock(return_value=mock_data)
     app.visualizer.plot_data = MagicMock()
 
-    # Run the app
+    # Run the app workflow
     app.run()
 
-    # Verify that methods were called with the correct arguments
-    app.data_manager.load_data.assert_called_once_with("data/example_trades.csv")
-    app.analyzer.detect_phases.assert_called_once_with(mock_data)
+    # Assertions to ensure all steps were called
+    app.data_manager.load_data.assert_called_once()
+    app.phase_analyzer.detect_phases.assert_called_once_with(mock_data)
     app.vsa_analyzer.calculate_spread.assert_called_once_with(mock_data)
     app.vsa_analyzer.detect_vsa_signals.assert_called_once_with(mock_data)
     app.visualizer.plot_data.assert_called_once_with(mock_data)

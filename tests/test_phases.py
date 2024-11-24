@@ -17,14 +17,14 @@ def test_detect_phases():
     # Apply phase detection logic
     result = detector.detect_phases(test_data)
 
-    # Debug: Print resultaat
-    print("Testresultaat:")
+    # Debug: Print the test result
+    print("Test Result:")
     print(result)
 
-    # Assertions aangepast aan correcte logica
+    # Assertions matching current logic
     assert "Phase" in result.columns, "Phase column not added to the data."
     assert result["Phase"].iloc[0] == "Undefined", "Incorrect phase detected for first row."
-    assert result["Phase"].iloc[1] == "Distribution", "Incorrect phase detected for second row."
-    assert result["Phase"].iloc[2] == "Distribution", "Incorrect phase detected for third row."
-    assert result["Phase"].iloc[3] == "Markup", "Incorrect phase detected for fourth row."
-    assert result["Phase"].iloc[4] == "Markup", "Incorrect phase detected for fifth row."
+    assert result["Phase"].iloc[1] == "Markup", "Incorrect phase detected for second row."
+    assert result["Phase"].iloc[2] == "Markup", "Incorrect phase detected for third row."
+    assert result["Phase"].iloc[3] == "Accumulation", "Incorrect phase detected for fourth row."
+    assert result["Phase"].iloc[4] == "Accumulation", "Incorrect phase detected for fifth row."

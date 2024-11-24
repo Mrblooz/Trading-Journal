@@ -100,3 +100,4 @@ def test_validate_data_missing_column(sample_data):
     manager = DataManager()
     with pytest.raises(ValueError):
         manager.validate_data(sample_data, ["Date", "Entry Price", "Nonexistent Column"])
+    

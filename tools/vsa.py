@@ -1,46 +1,58 @@
-import pandas as pd
+import logging
+
+# Initialize logger for VolumeSpreadAnalyzer
+logger = logging.getLogger("VolumeSpreadAnalyzer")
 
 class VolumeSpreadAnalyzer:
     """
-    A class for performing Volume Spread Analysis (VSA) on market data.
-    VSA identifies patterns based on volume and the price spread to detect market behavior.    """
+    Performs Volume Spread Analysis (VSA) to detect market signals
+    such as high volume wide spread or low volume narrow spread.
+    """
 
     def calculate_spread(self, data):
         """
-        Calculate the spread (difference between high and low prices) for each row in the data.
+        Calculates the price spread for each row of data.
         Args:
-            data (pd.DataFrame): DataFrame containing 'High' and 'Low' price columns.
-
+            data (pd.DataFrame): Trade data containing 'High' and 'Low' columns.
         Returns:
-            pd.DataFrame: Original DataFrame with an additional 'Spread' column.
+            pd.DataFrame: The input data with a new 'Spread' column added.
         """
-        print("Calculating price spread...")
-        data["Spread"] = data["High"] - data["Low"]
-        return data
+        logger.info("Calculating price spreads...")
+        try:
+            # Calculate the price spread as the difference between High and Low
+            data["Spread"] = data["High"] - data["Low"]
+            logger.info("Spread calculation completed.")
+            return data
+        except Exception as e:
+            logger.error("Error calculating price spreads.", exc_info=True)
+            raise
 
     def detect_vsa_signals(self, data):
         """
-        Detect VSA signals based on volume and spread.
+        Detects Volume Spread Analysis (VSA) signals based on price spread and volume.
         Args:
-            data (pd.DataFrame): DataFrame containing 'Volume' and 'Spread' columns.
+            data (pd.DataFrame): Trade data containing 'Spread' and 'Volume' columns.
         Returns:
-            pd.DataFrame: Original DataFrame with an additional 'Volume Signal' column.
+            pd.DataFrame: The input data with a new 'Volume Signal' column added.
         """
-        print("Detecting VSA signals...")
+        logger.info("Detecting VSA signals...")
+        try:
+            # Initialize the 'Volume Signal' column with a default value
+            data["Volume Signal"] = "Neutral"
+            
+            # Define conditions for high volume wide spread signals
+            high_volume = data["Volume"] > data["Volume"].mean()
+            wide_spread = data["Spread"] > data["Spread"].mean()
 
-        # Initialize a new column to store VSA signals
-        data["Volume Signal"] = "Neutral"
+            # Apply conditions to detect signals
+            data.loc[high_volume & wide_spread, "Volume Signal"] = "High Volume Wide Spread"
+            data.loc[~high_volume & ~wide_spread, "Volume Signal"] = "Low Volume Narrow Spread"
 
-        # Detect high volume and wide spread
-        data.loc[
-            (data["Volume"] > data["Volume"].mean()) & (data["Spread"] > data["Spread"].mean()),
-            "Volume Signal",
-        ] = "High Volume Wide Spread"
-
-        # Detect low volume and narrow spread
-        data.loc[
-            (data["Volume"] < data["Volume"].mean()) & (data["Spread"] < data["Spread"].mean()),
-            "Volume Signal",
-        ] = "Low Volume Narrow Spread"
-
-        return data
+            logger.info("VSA signal detection completed.")
+            return data
+        except KeyError as e:
+            logger.error(f"Missing required column in data: {e}")
+            raise
+        except Exception as e:
+            logger.error("Error during VSA signal detection.", exc_info=True)
+            raise

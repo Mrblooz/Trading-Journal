@@ -1,44 +1,49 @@
-import pandas as pd
+import logging
+
+# Initialize logger for PhaseAnalyzer
+logger = logging.getLogger("PhaseAnalyzer")
 
 class PhaseAnalyzer:
     """
-    A class for detecting "Wyckoff" phases (e.g., Accumulation, Distribution, Markup, Markdown).    
+    Detects Wyckoff phases (Accumulation, Markup, etc.) in trading data.
     """
+
     def __init__(self, rolling_window=3):
-        """ 
-        Initialize the PhaseAnalyzer.
+        """
+        Initializes the PhaseAnalyzer with a rolling window size.
         Args:
-            rolling_window (int): The size of the rolling window for moving averages.
+            rolling_window (int): Number of periods for calculating the rolling mean.
         """
         self.rolling_window = rolling_window
 
     def detect_phases(self, data):
         """
-        Detect "Wyckoff" phases using rolling averages.
+        Detects Wyckoff phases based on the rolling mean of the entry price.
         Args:
-            data (pd.DataFrame): DataFrame containing 'Entry Price' column.
-
+            data (pd.DataFrame): Trade data containing 'Entry Price'.
         Returns:
-            pd.DataFrame: Original DataFrame with an additional 'Phase' column.        
+            pd.DataFrame: Data with a new 'Phase' column.
+        Raises:
+            ValueError: If required columns are missing.
         """
-        print("Detecting Wyckoff Phases...")
-
-        # Add a column for rolling average
-        data["Rolling mean"] = data["Entry Price"].rolling(window=self.rolling_window).mean()
-        print("Met Rolling Mean:")
-        print(data)
-
-        # Initialize the 'Phase' column
-        data["Phase"] = "Undefined"
-
-        # Assign phases based on conditions
-        data.loc[data["Entry Price"] < data["Rolling mean"], "Phase"] = "Markup"
-        data.loc[data["Entry Price"] > data["Rolling mean"], "Phase"] = "Distribution"
-        print("Met Fases:")
-        print(data)
+        logger.info("Starting phase detection...")
         
-        # Drop the temporary rolling mean column if required
-        # Uncomment the following line to remove it
-        # data.drop(columns=["Rolling mean"], inplace=True)
-
-        return data
+        # Validate the input data
+        if "Entry Price" not in data.columns:
+            logger.error("Missing 'Entry Price' column.")
+            raise ValueError("Missing 'Entry Price' column.")
+        
+        try:
+            # Calculate the rolling mean for the entry price
+            data["Rolling Mean"] = data["Entry Price"].rolling(window=self.rolling_window).mean()
+            
+            # Assign phases based on the rolling mean
+            data["Phase"] = "Undefined"
+            data.loc[data["Entry Price"] < data["Rolling Mean"], "Phase"] = "Accumulation"
+            data.loc[data["Entry Price"] > data["Rolling Mean"], "Phase"] = "Markup"
+            
+            logger.info(f"Phase detection completed. {data['Phase'].nunique()} unique phases detected.")
+            return data
+        except Exception as e:
+            logger.error("Error in phase detection.", exc_info=True)
+            raise

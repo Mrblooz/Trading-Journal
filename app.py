@@ -1,57 +1,55 @@
-import logging
 from tools.data_manager import DataManager
-from tools.analyzer import Analyzer
+from tools.phases import PhaseAnalyzer
 from tools.vsa import VolumeSpreadAnalyzer
 from tools.visualization import Visualizer
+from logs.setup_logging import setup_logger
 
-# Configuration for the logging.
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"    
-)
+# Initialize centralized logger
+logger = setup_logger("TradingJournalApp")
 
 class TradingJournalApp:
     """
-    Main application class for the Trading Journal.
-    This class orchestrates data loading,analysis, and visualization.
+    Main application class for the trading journal workflow.
     """
     def __init__(self):
-        # Initiliaze of components
+        # Initialize components
         self.data_manager = DataManager()
-        self.analyzer = Analyzer()        
-        self.visualizer = Visualizer()
+        self.phase_analyzer = PhaseAnalyzer()  # Correctly instantiate PhaseAnalyzer
         self.vsa_analyzer = VolumeSpreadAnalyzer()
+        self.visualizer = Visualizer()
 
     def run(self):
-        """ 
-        Executes the core workflow of the trading journal application.
         """
-        logging.info("Starting Trading Journal Application...")
+        Executes the main workflow of the application.
+        """
+        logger.info("Starting Trading Journal Application...")
+        try:
+            # Step 1: Load data
+            data_file = "data/example_trades.csv"
+            logger.info(f"Loading data from {data_file}...")
+            data = self.data_manager.load_data(data_file)
 
-        # Step 1 Load Data
-        data_file = "data/example_trades.csv"
-        logging.info(f"Loading data from: {data_file}")
-        data = self.data_manager.load_data(data_file)
+            # Step 2: Detect phases
+            logger.info("Analyzing Wyckoff phases...")
+            data = self.phase_analyzer.detect_phases(data)  # Use PhaseAnalyzer instead of Analyzer
 
-        # Step 2 Analyseer Fases
-        logging.info("Analyzing Wyckoff phases...")
-        data = self.analyzer.detect_phases(data)
+            # Step 3: Perform VSA
+            logger.info("Performing Volume Spread Analysis (VSA)...")
+            data = self.vsa_analyzer.calculate_spread(data)
+            data = self.vsa_analyzer.detect_vsa_signals(data)
 
-        # Step 3 Execute Volume Spread Analysis (VSA)        
-        logging.info("Performing Volume Spread Analysis (VSA)...")
-        data = self.vsa_analyzer.calculate_spread(data)
-        data = self.vsa_analyzer.detect_vsa_signals(data)
+            # Step 4: Visualize results
+            logger.info("Visualizing results...")
+            self.visualizer.plot_data(data)
 
-        # Step 4 Visualize the results
-        logging.info("Visualizing results...")
-        self.visualizer.plot_data(data) 
+            # Step 5: Save processed data
+            output_file = "data/processed_trades.csv"
+            logger.info(f"Saving processed data to {output_file}...")
+            self.data_manager.save_data(data, output_file)
 
-        # Step 5 Save Data(optional)
-        output_file = "data/processed_trades.csv"
-        logging.info(f"Saving processed data to: {output_file}...")
-        self.data_manager.save_data(data, output_file)
-
-        logging.info("Trading Journal Application has completed successfully!")
+            logger.info("Trading Journal Application completed successfully!")
+        except Exception as e:
+            logger.error("Critical error in application execution.", exc_info=True)
 
 if __name__ == "__main__":
     app = TradingJournalApp()

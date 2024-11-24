@@ -1,85 +1,60 @@
-import pandas as pd
-import yfinance as yf
 import os
+import pandas as pd
 import logging
 
-class DataManager:
-    def __init__(self): 
+# Initialize logger for DataManager
+logger = logging.getLogger("DataManager")
 
-        """
-        Initialize the DataManager class and configure the logging.
-        """
-        logging.basicConfig( # Set to Debug to log detailed informaiton for troubleshooting.
-            level=logging.DEBUG,        
-            format="%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] %(message)s",    
-            handlers = [
-                logging.FileHandler("data_manager.log"), # Save to a log file.
-                logging.StreamHandler() # Also log to the console
-            ]                        
-        )
-        logging.debug("DataManager initialized")
+class DataManager:
+    """
+    Handles data loading, saving, and validation for the trading journal application.
+    """
 
     def load_data(self, filepath):
-        """ 
-        Load trade data from a CSV file.
-        Args: 
+        """
+        Loads trade data from a CSV file.
+        Args:
             filepath (str): Path to the CSV file.
         Returns:
-            pd.DataFrame: DataFrame containing the loaded data.
+            pd.DataFrame: Loaded data as a pandas DataFrame.
+        Raises:
+            FileNotFoundError: If the file does not exist.
         """
-        logging.info(f"Attempting to load data from {filepath}...")
+        logger.info(f"Attempting to load data from {filepath}...")
+        
+        # Check if the file exists before attempting to load
+        if not os.path.exists(filepath):
+            logger.error(f"File not found: {filepath}")
+            raise FileNotFoundError(f"File not found: {filepath}")
+        
         try:
+            # Load the CSV file into a pandas DataFrame
             data = pd.read_csv(filepath, parse_dates=["Date"])
-            logging.info(f"Data successfully loaded from {filepath}")
-            logging.debug(f"Loaded data preview:\n{data.head()}")
+            logger.info(f"Loaded {len(data)} rows successfully.")
             return data
-        except FileNotFoundError:
-            logging.error(f"File not found: {filepath}")
-            raise
         except pd.errors.EmptyDataError:
-            logging.error(f"File at {filepath} is empty or improperly formatted.")
+            logger.error(f"The file {filepath} is empty.")
             raise
         except Exception as e:
-            logging.exception(f"An unexpected error occurred while loading data from {filepath}:{e}")
+            logger.error("Unexpected error while loading data.", exc_info=True)
             raise
 
     def save_data(self, data, filepath):
         """
-        Save trade data to a CSV file.
+        Saves processed trade data to a CSV file.
         Args:
-            data (pd.DataFrame): The DataFrame to save.
-            filepath(str): Path where the file will be saved.
+            data (pd.DataFrame): DataFrame to save.
+            filepath (str): Path to the output CSV file.
         """
-        logging.info(f"Attempting to save data to {filepath}...")
+        logger.info(f"Saving data to {filepath}...")
+        
+        # Ensure the directory for the file exists
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        
         try:
-            os.makedirs(os.path.dirname(filepath), exist_ok = True)
+            # Save the DataFrame to a CSV file
             data.to_csv(filepath, index=False)
-            logging.info(f"Data successfully saved to {filepath}.")
-            logging.debug(f"Saved data preview:\n{data.head()}")
+            logger.info("Data saved successfully.")
         except Exception as e:
-            logging.exception(f"An unexpected error occured while saving data to {filepath}: {e}")
+            logger.error("Unexpected error while saving data.", exc_info=True)
             raise
-
-    def fetch_historical_data(self, pair ="EUR/USD=X", start="2021-01-01", end="2023-01-01"):
-        """
-        Fetch historical data from Yahoo Finance.
-        Args:
-            pair (str): The currency pair or ticker symbol(e.g., "EURUSD=X").
-            start (str): Start date for historical data (YYYY-MM-DD).
-            end (str): End date for historical data (YYYY-MM-DD).
-        
-        Returns:
-            pd.DataFrame: DataFrame containing the historical data.
-        """
-        logging.info(f"Fetching historical data for {pair} from {start} to {end}...")
-        try:
-            data = yf.download(pair, start=start, end=end)
-            logging.info(f"Successfully fetched historical data for {pair}.")
-            logging.debug(f"Fetched dta preview:\n{data.head()}")
-            filepath = f"data/{pair}_data.csv"
-            self.save_data(data, filepath)
-            return data
-        except Exception as e:
-            logging.exception(f"An error occured while fetching historical data for {pair}: {e}")
-            raise
-        

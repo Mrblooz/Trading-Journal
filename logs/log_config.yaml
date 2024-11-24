@@ -1,0 +1,28 @@
+version: 1
+formatters:
+  detailed:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  simple:
+    format: "%(levelname)s - %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler  # Corrected from logger.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+  file:
+    class: logging.FileHandler  # Corrected from logger.FileHandler
+    level: DEBUG
+    formatter: detailed
+    filename: logs/app.log
+
+loggers:
+  TradingJournalApp:
+    level: DEBUG
+    handlers: [console, file]
+    propagate: no
+
+root:
+  level: WARNING
+  handlers: [console, file]

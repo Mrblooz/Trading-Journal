@@ -1,62 +1,43 @@
 import matplotlib.pyplot as plt
 import logging
 
-# Configure logging for the visualizer
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
+# Initialize logger for Visualizer
+logger = logging.getLogger("Visualizer")
 
 class Visualizer:
     """
-    A class responsible for visualizing trading data with various types of charts.
+    Creates visualizations for trading data, including price trends and phases.
     """
-    def __init__(self):
-        """
-        Initialize the Visualizer class.
-        """
-        logging.debug("Visualizer initialized.")
 
     def plot_data(self, data):
         """
-        Plot trading data, including Entry and Exit Prices, with annotations for phases.
-
+        Generates a plot of entry and exit prices with annotated Wyckoff phases.
         Args:
-            data (pd.Dataframe): The trading data to visualize. It should have colummns:
-                - 'Date'
-                - 'Entry Price'
-                - 'Exit Price'
-                - 'Phase'
+            data (pd.DataFrame): Trade data with 'Date', 'Entry Price', 'Exit Price', and 'Phase'.
         """
-        logging.debug("Starting to plot data...")
-
+        logger.info("Creating plot...")
         try:
-            # Configure plot size
-            plt.figure(figsize=(12,6))
-
-            # Plot Entry and Exit prices
-            plt.plot(data["Date"], data["Entry Price"], label = "Entry Price", marker="o", color="blue")
-            plt.plot(data["Date"], data["Exit Price"], label = "Exit Price", linestyle = "--", color="orange")
-
-            # annotate phases  
-            for  i, phase in enumerate(data["Phase"]):
+            # Initialize the plot
+            plt.figure(figsize=(12, 6))
+            
+            # Plot entry and exit prices
+            plt.plot(data["Date"], data["Entry Price"], label="Entry Price", marker="o", color="blue")
+            plt.plot(data["Date"], data["Exit Price"], label="Exit Price", linestyle="--", color="orange")
+            
+            # Annotate the phases
+            for i, phase in enumerate(data["Phase"]):
                 plt.text(data["Date"][i], data["Entry Price"][i] + 0.005, phase, fontsize=10, ha="center")
-
-            # Add Labels, title, and Legend
+            
+            # Add labels, title, and grid
             plt.title("Trading Data Visualization")
-            plt.xlabel("Date", fontsize=12)
-            plt.ylabel("Price", fontsize=12)
+            plt.xlabel("Date")
+            plt.ylabel("Price")
             plt.legend()
-
-            # Enable grid and adjust layout
             plt.grid(True)
             plt.tight_layout()
-
+            
             # Display the plot
-            logging.debug("Displaying the plot...")
             plt.show()
+            logger.info("Plot successfully created.")
         except Exception as e:
-            logging.error(f"An error occurred while plotting date: {e}")
-            raise
-
-
-
-
-        
+            logger.error("Error during plotting.", exc_info=True)

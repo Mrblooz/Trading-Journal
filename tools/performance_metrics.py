@@ -1,123 +1,68 @@
 import pandas as pd
 import logging
 
-# initialize logger for PerformanceMetrics
-logger = logging.getLogger()
+# Initialize logger for Metrics
+logger = logging.getLogger("Metrics")
 
-class PerformanceMetrics:
+class Metrics:
     """
-    A class to calculate and analyze performance metrics for trading data.    
+    Calculates performance metrics for trading data.
     """
 
-    def __init__(self, data):
+    def calculate_metrics(self, data):
         """
-        Initialize with the trading data.
+        Calculate various performance metrics from the trade data.
         Args:
-            data(pd.DataFrame): The trading data DataFrame.
-        """
-        self.data = data
-
-    def calculate_pnl(self):
-        """
-        Calculate profit/loss (PnL) for each trade
-        Adds a new 'PnL' column to the DataFrame        
-        """
-        logger.info("Calculate Profit/Loss (PnL) for each trade...")
-        try:
-            # Assuming 'Size' column exists; default to 1 if not 
-            self.data["Size"] = self.data.get("Size", 1)
-            self.data["PnL"] = (self.data["Exit Price"] - self.data["Entry Price"]) * self.data["Size"]            
-            logger.info("PnL calculation  Completed.")
-            return self.data
-        except Exception as e:
-            logger.error("Error calculating PnL.", exc_info=True)
-            raise
-
-    def categorize_trades(self):
-        """
-        Categorize each trade as a 'Win' or 'Loss'.
-        Adds a new 'Trade Result' column to the DataFrame
-        """
-        logger.info("Categorizing trades as 'Win' or 'Loss'...")
-        try:
-            self.data["Trade Result"] = self.data["PnL"].apply(lambda x: "Win" if x > 0 else "Loss")
-            logger.info("Trade categorization Completed.")
-            return self.data
-        except Exception as e:
-            logger.error("Error categorizing trades.", exc_info=True)
-            raise
-
-    def calculate_total_pnl(self):
-        """
-        Calculate the total profit/loss across all trades.
+            data (pd.DataFrame): DataFrame containing trade data with 'Entry Price' and 'Exit Price'.
         Returns:
-            float: Total PnL.
+            dict: Dictionary containing calculated metrics.
         """
-        logger.info(f"Total PnL...")
+        logger.info("Starting metrics calculation...")
         try:
-            total_pnl = self.data["PnL"].sum()
-            logger.info(f"Total PnL": {total_pnl})
-            return total_pnl
+            # Ensure required columns are present
+            required_columns = ["Entry Price", "Exit Price"]
+            if not all(col in data.columns for col in required_columns):
+                raise ValueError(f"Missing required columns for metrics calculation: {required_columns}")
+
+            # Calculate metrics
+            total_trades = len(data)
+            profitable_trades = len(data[data["Exit Price"] > data["Entry Price"]])
+            losing_trades = len(data[data["Exit Price"] <= data["Entry Price"]])
+            win_rate = (profitable_trades / total_trades) * 100 if total_trades > 0 else 0
+
+            avg_profit = data.loc[data["Exit Price"] > data["Entry Price"], "Exit Price"].mean()
+            avg_loss = data.loc[data["Exit Price"] <= data["Entry Price"], "Exit Price"].mean()
+            
+            # Handle edge cases for Profit/Loss Ratio
+            if pd.notna(avg_profit) and pd.notna(avg_loss) and avg_loss != 0:
+                profit_loss_ratio = avg_profit / abs(avg_loss)
+            else:
+                profit_loss_ratio = "N/A"
+
+            # Handle Trade Duration if Date exists
+            if "Date" in data.columns and not data["Date"].empty:
+                try:
+                    data["Date"] = pd.to_datetime(data["Date"], errors="coerce")
+                    data["Trade Duration"] = data["Date"].diff().dt.days
+                    avg_duration = data["Trade Duration"].mean()
+                except Exception as e:
+                    logger.warning("Trade Duration calculation failed. Defaulting to 'N/A'.", exc_info=True)
+                    avg_duration = "N/A"
+            else:
+                avg_duration = "N/A"
+
+            # Compile metrics into a dictionary
+            metrics = {
+                "Total Trades": total_trades,
+                "Profitable Trades": profitable_trades,
+                "Losing Trades": losing_trades,
+                "Win Rate (%)": round(win_rate, 2),
+                "Profit/Loss Ratio": round(profit_loss_ratio, 2) if profit_loss_ratio != "N/A" else "N/A",
+                "Average Trade Duration (days)": round(avg_duration, 2) if avg_duration != "N/A" else "N/A"
+            }
+
+            logger.info("Metrics calculation completed.")
+            return metrics
         except Exception as e:
-            logger.error("Error Calculating total PnL.", exc_info = True)
+            logger.error("Error during metrics calculation.", exc_info=True)
             raise
-
-    def calculate_win_rate(self):
-        """
-        Calculate the win rate as a percentage.
-        Returns:
-            float: Win rate percentage.
-        """
-        logger.info("Calculating win rate...")
-        try:
-            total_trades = len(self.data)
-            wins = len(self.data[self.data["Trade Result"] == "Win"])
-            win_rate = (wins / total_trades) * 100 if total_trades > 0 else 0
-            logger.info(f"Win Rate: {win_rate:.2f}%")
-            return win_rate
-        except Exception as e:
-            logger.error("Error Calculating win rate.", exc_info=True)
-            raise
-
-    def calculate_risk_reward(self):
-        """
-        Calculate the risk/reward ration
-        Returns
-            float: Risk/reward ratio.         
-        """
-        logger.info("Calculating risk/reward ratio...")
-        try:
-            avg_profit = self.data[self.data["PnL"] > 0]["PnL"].mean()
-            avg_loss = abs(self.data[self.data["PnL"] > 0]["PnL"].mean())
-            risk_reward = avg_profit / avg_loss if avg_loss else float("Inf")
-            logger.info(f"Risk/Reward Ratio: {risk_reward:.2f}")
-            return risk_reward
-        except Exception as e:
-            logger.error("Error calculating risk/reward ratio.", exc_info = True)
-            raise
-
-    def calculate_cumulative_pnl(self):
-        """
-        Calculate the cumulative PnL over time.
-        Adds a 'Cumulative PnL' column to the DataFrame
-        """
-        logger.info("Calculating cumulative PnL...")
-        try:
-            self.data["Cumulative PnL"] = self.data["PnL"].cumsum()
-            logger.info("Cumulative PnL calculation complete")
-            return self.data
-        except Exception as e:
-            logger.error("Error calculating cumulative PnL.", exc_info=True)
-            raise
-
-        
-
-                                   
-
-
-
-
-
-
-
-

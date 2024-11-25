@@ -1,4 +1,5 @@
 from tools.data_manager import DataManager
+from tools.performance_metrics import Metrics
 from tools.phases import PhaseAnalyzer
 from tools.vsa import VolumeSpreadAnalyzer
 from tools.visualization import Visualizer
@@ -14,6 +15,7 @@ class TradingJournalApp:
     def __init__(self):
         # Initialize components
         self.data_manager = DataManager()
+        self.metrics = Metrics()
         self.phase_analyzer = PhaseAnalyzer()  # Correctly instantiate PhaseAnalyzer
         self.vsa_analyzer = VolumeSpreadAnalyzer()
         self.visualizer = Visualizer()
@@ -38,11 +40,15 @@ class TradingJournalApp:
             data = self.vsa_analyzer.calculate_spread(data)
             data = self.vsa_analyzer.detect_vsa_signals(data)
 
-            # Step 4: Visualize results
+            # Step 4: Calculate Metrics
+            logger.info("Calculating perfomance metrics...")
+            metrics = self.metrics.calculate_metrics(data)
+
+            # Step 5: Visualize results
             logger.info("Visualizing results...")
             self.visualizer.plot_data(data)
 
-            # Step 5: Save processed data
+            # Step 6: Save processed data
             output_file = "data/processed_trades.csv"
             logger.info(f"Saving processed data to {output_file}...")
             self.data_manager.save_data(data, output_file)
